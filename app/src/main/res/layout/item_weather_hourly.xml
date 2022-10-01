@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textView_startTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:text="Start Time"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/textView_windDirection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wind Direction"
+        android:layout_margin="24dp"
+        app:layout_constraintLeft_toRightOf="@id/textView_startTime"
+        tools:layout_editor_absoluteY="16dp" />
+
+
+    <TextView
+        android:id="@+id/textView_windSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:text="Wind Speed"
+        app:layout_constraintLeft_toRightOf="@id/textView_windDirection"
+        tools:layout_editor_absoluteY="16dp" />
+
+
+    <TextView
+        android:id="@+id/textView_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:text="Temp"
+        app:layout_constraintLeft_toRightOf="@id/textView_windSpeed"
+        tools:layout_editor_absoluteY="16dp" />
+
+
+    <TextView
+        android:id="@+id/textView_shortForecast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Short Forecast"
+        android:layout_marginBottom="12dp"
+        android:layout_marginRight="12dp"
+        app:layout_constraintRight_toLeftOf="@+id/imageViewIcon"
+        app:layout_constraintTop_toBottomOf="@id/textView_windDirection"/>
+
+    <ImageView
+        android:id="@+id/imageViewIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="67dp"
+        app:layout_constraintLeft_toRightOf="@id/textView_temperature"
+        app:layout_constraintWidth_max="67dp"
+        tools:layout_editor_absoluteY="16dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
