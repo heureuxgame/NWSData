@@ -13,9 +13,10 @@ use only 4 decimals in lat_lon
 For example, St Louis would be
 https://api.weather.gov/points/38.6270,-90.1994
 enter that URL in a web browser and from the response get
-https://api.weather.gov/gridpoints/LSX/94,73/forecast/ as your BASE_URL
-from properties:  forecast
-this is your gridpoint
+https://api.weather.gov/gridpoints/LSX/94,73/forecast/ 
+from properties:  forecast of the response
+Use this as your BASE_URL in NwsApiService.kt
+that is your forecast gridpoint
 
 There are some issues, the returns are not always in the same format as the documention
 ApiData.kt is an example of the data returned from the gridpoint call
