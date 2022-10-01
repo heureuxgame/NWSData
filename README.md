@@ -19,3 +19,8 @@ this is your gridpoint
 
 There are some issues, the returns are not always in the same format as the documention
 ApiData.kt is an example of the data returned from the gridpoint call
+
+The icons in the drawables folder are from https://www.weather.gov/forecast-icons
+The drawable's filename for the icon doesn't always match the url provided in the JSON return
+https://api.weather.gov/icons/land/night/few?size=small
+so there is some parsing and work-around in the HomeViewModel.kt file
