@@ -26,6 +26,7 @@ class ForecastViewModel : ViewModel() {
     val data: LiveData<List<ForecastHourlyData>> = _data
 
     val location: String = NwsApi.location
+
     fun getNwsHourlyForecast() {
 
         viewModelScope.launch {
