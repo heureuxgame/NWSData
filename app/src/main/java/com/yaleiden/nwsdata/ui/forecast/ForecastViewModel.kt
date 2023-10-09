@@ -25,6 +25,7 @@ class ForecastViewModel : ViewModel() {
 
     val data: LiveData<List<ForecastHourlyData>> = _data
 
+    //  Location name to go along with point forecast
     val location: String = NwsApi.location
 
     fun getNwsHourlyForecast() {
@@ -39,7 +40,7 @@ class ForecastViewModel : ViewModel() {
                     Log.d(TAG, "response.isSuccessful ")
                     Log.d(TAG, response.toString())
                     lateinit var resultJson: JSONObject
-                    //listResult = response.body()
+
                     try {
                         Log.d(TAG, "try")
                         resultJson =
@@ -130,8 +131,13 @@ class ForecastViewModel : ViewModel() {
 
     }
 
-    //"icon": "https://api.weather.gov/icons/land/night/skc?size=small"
-    //"icon": "https://api.weather.gov/icons/land/day/skc?size=small"
+    /**
+     * @param String
+     * @return String
+     * Parses local resource image name from url returned by NWS API
+     * "icon": "https://api.weather.gov/icons/land/night/few?size=small"
+     * "icon":"https://api.weather.gov/icons/land/night/skc,0?size=small"
+     */
     fun getIcon(url: String): String {
         //Get this - "icon": "https://api.weather.gov/icons/land/night/skc
         val first = url.substringBefore("?")
