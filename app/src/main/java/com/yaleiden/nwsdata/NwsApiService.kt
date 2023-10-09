@@ -44,7 +44,7 @@ val userAgentInterceptor = UserAgentInterceptor()
 // OkHttpClient. Be conscious with the order
 var okHttpClient = OkHttpClient()
     .newBuilder()
-    .addInterceptor(userAgentInterceptor) // interceptor for adding User-Agent
+    .addInterceptor(userAgentInterceptor) // interceptor for adding User-Agent - recommended by NWS
     .build()
 
 private val retrofit = Retrofit.Builder()
