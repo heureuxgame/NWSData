@@ -1,10 +1,11 @@
 package com.yaleiden.nwsdata
 
+import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
-
+import java.util.logging.Logger
 
 class ForecastHourlyData {
-
+private val TAG = "ForecastHourlyData"
 
     var number: Int = 0 //": 1, Time Period number
 
@@ -30,15 +31,51 @@ class ForecastHourlyData {
 
     var shortForecast:String = "null"//": "Mostly Sunny",
 
-    var detailedForecast:String = "null"//":
+    //var detailedForecast:String = "null"//":
 
+    var probabilityOfPrecipitation: Int = 100
+    /*
+    "probabilityOfPrecipitation": {
+        "unitCode": "wmoUnit:percent",
+        "value": 40
+    }
+     */
+    var relativeHumidity: Int = 0
+    /*
+    "relativeHumidity": {
+        "unitCode": "wmoUnit:percent",
+        "value": 64
+    }
+    */
+
+/*
     companion object {
+        private val TAG: String = "ForecastHourlyData CO"
+        val LOG = Logger.getLogger(ForecastHourlyData::class.java.name)
         val DiffCallback = object : DiffUtil.ItemCallback<ForecastHourlyData>() {
-            override fun areItemsTheSame(oldItem: ForecastHourlyData, newItem: ForecastHourlyData) =
-                oldItem.startTime == newItem.startTime
 
-            override fun areContentsTheSame(oldItem: ForecastHourlyData, newItem: ForecastHourlyData) =
-                oldItem == newItem
+            override fun areItemsTheSame(
+                oldItem: ForecastHourlyData,
+                newItem: ForecastHourlyData
+            ): Boolean {
+                LOG.warning(TAG +" areItemsTheSame " + oldItem.number +" "+ newItem.number)
+                return oldItem.number == newItem.number
+            }
+
+            override fun areContentsTheSame(
+                oldItem: ForecastHourlyData,
+                newItem: ForecastHourlyData
+            ): Boolean {
+                LOG.warning( TAG +" areContentsTheSame " + oldItem.startTime +" "+ newItem.startTime)
+                return oldItem.startTime.equals(newItem.startTime)
+                        && oldItem.endTime.equals(newItem.endTime)
+                        && oldItem.shortForecast.equals(newItem.shortForecast)
+                        && oldItem.temperature.equals(newItem.temperature)
+                        && oldItem.icon.equals(newItem.icon)
+            }
+
         }
     }
+
+*/
 }

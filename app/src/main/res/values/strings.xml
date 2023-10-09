@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">NWS BAWD</string>
+    <string name="app_name">FISH WX</string>
+    <string name="loc_name">Winfield Hills</string>
     <string name="title_home">Hourly</string>
     <string name="title_dashboard">Radar</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications">Lake Level</string>
 </resources>
