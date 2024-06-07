@@ -24,8 +24,8 @@ this is your gridpoint
 //private val BASE_URL = "https://api.weather.gov/gridpoints/CAE/15,40/forecast/"
 
 // Location for Clay Hill, GA
-const val LOCATION = "Clay Hill, GA"
-private val BASE_URL = "https://api.weather.gov/gridpoints/CAE/14,41/forecast/"
+var LOCATION = "Clay Hill, GA"
+var BASE_URL = "https://api.weather.gov/gridpoints/CAE/14,41/forecast/"
 
 // Location for Hawks Rest USFS Patrol Cabin, Bridger-Teton NF, WY
 //const val LOCATION = "Hawks Rest BTNF, WY"
@@ -38,8 +38,11 @@ private val BASE_URL = "https://api.weather.gov/gridpoints/CAE/14,41/forecast/"
 //private val UA = System.getProperty("http.agent")  // Get android user agent.
 
 
-
 val userAgentInterceptor = UserAgentInterceptor()
+//val pointLocations = PointLocations()
+//var listLocation = 0
+//lateinit var location: String
+//lateinit var base_url: String
 
 // OkHttpClient. Be conscious with the order
 var okHttpClient = OkHttpClient()
@@ -51,12 +54,13 @@ private val retrofit = Retrofit.Builder()
     .client(okHttpClient)
     .addConverterFactory(ScalarsConverterFactory.create())
     .baseUrl(BASE_URL)
+
+    //.baseUrl(pointLocations.points[NwsApi.listLocation])
     .build()
 
 interface NwsApiService {
     @GET("hourly")
     suspend fun getHourlyForecast(): Response<String>
-    //suspend fun getHourlyForecast(): Response<ForecastHourlyData>
 
 }
 
@@ -64,5 +68,9 @@ object NwsApi {
     val retrofitService: NwsApiService by lazy {
         retrofit.create(NwsApiService::class.java)
     }
+    //var listLocation = 0
     val location = LOCATION
+
+    //var location = pointLocations.names[listLocation]
+
 }

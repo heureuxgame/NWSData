@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yaleiden.nwsdata.ForecastHourlyData
 import com.yaleiden.nwsdata.R
-import com.yaleiden.nwsdata.databinding.FragmentHomeBinding
+import com.yaleiden.nwsdata.databinding.FragmentWeatherBinding
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
@@ -27,7 +27,7 @@ import java.time.format.DateTimeFormatter
 class ForecastFragment : Fragment() {
 
     private val TAG: String = "ForecastFragment"
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentWeatherBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -42,7 +42,7 @@ class ForecastFragment : Fragment() {
     ): View {
         Log.d(TAG, "onCreateView View ")
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentWeatherBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val recyclerView: RecyclerView = root.findViewById(R.id.recyclerview)
         val adapter = HourlyAdapter()
@@ -61,8 +61,7 @@ class ForecastFragment : Fragment() {
                     Log.d(TAG, "adapter.submitList(hourlyData) ")
                     adapter.submitList(hourlyData)
                     adapter.notifyDataSetChanged()
-                    //text_home.text = getString(R.string.loc_name)   //Top UI Banner
-                    //text_home.text =  NwsApi.location //Top UI Banner
+
                     text_home.text =  forecastViewModel.location //Top UI Banner
                     progress.visibility = View.GONE    //Remove progress when loaded
                 }

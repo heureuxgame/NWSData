@@ -10,7 +10,7 @@ class UserAgentInterceptor : Interceptor {
     /**
      * Recommended by NWS to have user agent when making API calls
      */
-    val useragent = "Fish WX App, email address"
+    val useragent = "Fish WX App, yleiden@hotmail.com"
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {

@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yaleiden.nwsdata.ForecastHourlyData
 import com.yaleiden.nwsdata.NwsApi
+import com.yaleiden.nwsdata.NwsApiService
+//import com.yaleiden.nwsdata.pointLocations
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
@@ -26,12 +28,18 @@ class ForecastViewModel : ViewModel() {
     val data: LiveData<List<ForecastHourlyData>> = _data
 
     //  Location name to go along with point forecast
-    val location: String = NwsApi.location
+    lateinit var location: String
+    //val location: String = NwsApi.location
+    //NwsApi.location
 
     fun getNwsHourlyForecast() {
 
+        //NwsApi.listLocation = 0
+        location = NwsApi.location
+        Log.d(TAG, "location = " + location)
         viewModelScope.launch {
             Log.d(TAG, "viewModelScope.launch")
+
             var errorMsg: String = "No Error"
             try {
 
@@ -42,7 +50,7 @@ class ForecastViewModel : ViewModel() {
                     lateinit var resultJson: JSONObject
 
                     try {
-                        Log.d(TAG, "try")
+                        Log.d(TAG, "getNwsHourlyForecast() try")
                         resultJson =
                             JSONObject(response.body())
                     } catch (e: Exception) {
@@ -63,7 +71,7 @@ class ForecastViewModel : ViewModel() {
                     //Log.d(TAG, "periodsJson length" + periodsJson.length())
                     _data.value = makePeriods(periodsJson)
                 } else {
-                    Log.d(TAG, "else")
+                    Log.d(TAG, "getNwsHourlyForecast() else")
                     val errorData = ForecastHourlyData()
                     errorData.number = 999
                     errorData.shortForecast = errorMsg

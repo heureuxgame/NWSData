@@ -9,17 +9,17 @@
         android:id="@+id/navigation_home"
         android:name="com.yaleiden.nwsdata.ui.forecast.ForecastFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_weather" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.yaleiden.nwsdata.ui.radar.RadarFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_radar" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.yaleiden.nwsdata.ui.lakelevel.LakeLevelFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_lake_level" />
 </navigation>

@@ -27,4 +27,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fab_btn"
+        android:layout_margin="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/lakeLevelWebView"
+        app:layout_constraintBottom_toBottomOf="@+id/lakeLevelWebView"
+        app:backgroundTint="@color/purple_500"
+        app:elevation="6dp"
+        android:src="@drawable/ic_baseline_refresh_24"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

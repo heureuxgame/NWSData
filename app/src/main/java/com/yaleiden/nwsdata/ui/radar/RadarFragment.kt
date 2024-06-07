@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.yaleiden.nwsdata.databinding.FragmentDashboardBinding
+import com.yaleiden.nwsdata.databinding.FragmentRadarBinding
 
 
 
 class RadarFragment : Fragment() {
     private val TAG = "RadarFragment"
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentRadarBinding? = null
     //private var radarWebView: WebView? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -27,7 +27,7 @@ class RadarFragment : Fragment() {
         val radarViewModel =
             ViewModelProvider(this).get(RadarViewModel::class.java)
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentRadarBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textDashboard
