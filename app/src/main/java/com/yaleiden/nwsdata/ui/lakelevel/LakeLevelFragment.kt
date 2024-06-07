@@ -13,7 +13,7 @@ import com.yaleiden.nwsdata.databinding.FragmentLakeLevelBinding
 
 class LakeLevelFragment : Fragment() {
 
-    private val TAG: String = "LakeLevelFragment"
+    private val tag: String = "LakeLevelFragment"
     private var _binding: FragmentLakeLevelBinding? = null
 
     // This property is only valid between onCreateView and
@@ -25,10 +25,10 @@ class LakeLevelFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "onCreateView ")
+        Log.d(tag, "onCreateView ")
         val lakeLevelViewModel =
             ViewModelProvider(this).get(LakeLevelViewModel::class.java)
-        Log.d(TAG, "_binding ")
+        Log.d(tag, "_binding ")
         _binding = FragmentLakeLevelBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -45,7 +45,7 @@ class LakeLevelFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val fab: View = requireView().findViewById(R.id.fab_btn)
-        fab.setOnClickListener(){
+        fab.setOnClickListener {
             onClickRefresh()
         }
     }
