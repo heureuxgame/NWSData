@@ -14,6 +14,7 @@ import com.yaleiden.nwsdata.databinding.FragmentLakeLevelBinding
 class LakeLevelFragment : Fragment() {
 
     private val tag: String = "LakeLevelFragment"
+    private val testchange: String = "Test Chage"
     private var _binding: FragmentLakeLevelBinding? = null
 
     // This property is only valid between onCreateView and
