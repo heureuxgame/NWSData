@@ -21,7 +21,7 @@
         android:id="@+id/textView_startTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
         android:text="Start Time"
         app:layout_constraintStart_toEndOf="@+id/imageViewIcon"
@@ -31,7 +31,7 @@
         android:id="@+id/textView_windDirection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginLeft="12dp"
         android:layout_marginTop="16dp"
         android:text="Wind Direction"
         app:layout_constraintLeft_toRightOf="@id/textView_startTime"
@@ -42,7 +42,7 @@
         android:id="@+id/textView_windSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginLeft="12dp"
         android:layout_marginTop="16dp"
         android:text="Wind Speed"
         app:layout_constraintLeft_toRightOf="@id/textView_windDirection"
@@ -53,7 +53,7 @@
         android:id="@+id/textView_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginLeft="12dp"
         android:layout_marginTop="16dp"
         android:text="Temp"
         app:layout_constraintLeft_toRightOf="@id/textView_windSpeed"
@@ -64,14 +64,14 @@
         android:id="@+id/textView_shortForecast"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="6dp"
         android:maxLines="3"
         android:text="Short Forecast will appear here and sometimes will be long enought that it has to wrap"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewIcon"
+        app:layout_constraintEnd_toEndOf="@id/textView_temperature"
         app:layout_constraintStart_toEndOf="@+id/imageViewIcon"
-        app:layout_constraintTop_toBottomOf="@+id/textView_startTime"
-        app:layout_constraintEnd_toEndOf="@id/textView_temperature"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView_startTime" />
 
 
 

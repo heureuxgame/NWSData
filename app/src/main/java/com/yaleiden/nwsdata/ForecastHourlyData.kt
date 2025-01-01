@@ -27,27 +27,30 @@ private val TAG = "ForecastHourlyData"
 
     var windDirection:String = "null"//": "N",
 
-    var icon: String = "null"//": "https://api.weather.gov/icons/land/day/sct?size=medium",
+    var icon:String = "null"//": "https://api.weather.gov/icons/land/day/sct?size=medium",
 
     var shortForecast:String = "null"//": "Mostly Sunny",
 
     //var detailedForecast:String = "null"//":
 
-    var probabilityOfPrecipitation: Int = 100
+    var probabilityOfPrecipitation:Int = 100
     /*
     "probabilityOfPrecipitation": {
         "unitCode": "wmoUnit:percent",
         "value": 40
     }
      */
-    var relativeHumidity: Int = 0
+    var relativeHumidity:String = "null"
     /*
     "relativeHumidity": {
         "unitCode": "wmoUnit:percent",
         "value": 64
     }
     */
-
+    var dewpoint:String = "null"
+    /*
+    "dewpoint":{"unitCode":"wmoUnit:degC","value":0}
+*/
 /*
     companion object {
         private val TAG: String = "ForecastHourlyData CO"

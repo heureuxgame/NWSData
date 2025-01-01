@@ -126,9 +126,10 @@ class ForecastViewModel : ViewModel() {
             val probPrecip = forecast.getJSONObject("probabilityOfPrecipitation")
             hourlyForecast.probabilityOfPrecipitation = probPrecip.getInt("value")
             //hourlyForecast.probabilityOfPrecipitation = forecast.get("probabilityOfPrecipitation") as Int
-            val relHum = forecast.getJSONObject("dewpoint")
-            hourlyForecast.relativeHumidity = relHum.getInt("value")
-            //hourlyForecast.relativeHumidity = hourlyForecast.relativeHumidity = forecast.get("relativeHumidity") as Int
+            val relHum = forecast.getJSONObject("relativeHumidity")
+            hourlyForecast.relativeHumidity = relHum.get("value").toString()
+            val dewp = forecast.getJSONObject("dewpoint")
+            hourlyForecast.dewpoint = dewp.get("value").toString()
             val icn: String = getIcon(forecast.get("icon") as String)
             hourlyForecast.icon = icn
 
