@@ -167,9 +167,11 @@ class ForecastFragment : Fragment() {
                 Log.d(TAG, "onBindViewHolder " + e.toString())
                 e.toString()
             }
-
+            val temp = listData.temperature.toString().plus(" ")
+            val humidity = listData.relativeHumidity.plus("%")
             holder.textView_windSpeed.text = listData.windSpeed
-            holder.textView_temperature.text = listData.temperature.toString().plus("F")
+            //holder.textView_temperature.text = listData.temperature.toString().plus("F").plus(" / ").plus(listData.relativeHumidity.toString().plus("%"))
+            holder.textView_temperature.text = temp.plus("/").plus(humidity)
             holder.textView_windDirection.text = listData.windDirection
             holder.textView_startTime.text = dayHour
             holder.textView_shortForecast.text = listData.shortForecast.plus(" " +listData.probabilityOfPrecipitation.toString().plus("%"))
