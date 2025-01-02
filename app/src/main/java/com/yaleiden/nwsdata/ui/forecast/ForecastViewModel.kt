@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.yaleiden.nwsdata.ForecastHourlyData
 import com.yaleiden.nwsdata.NwsApi
 import com.yaleiden.nwsdata.NwsApiService
+import com.yaleiden.nwsdata.PointLocations
 //import com.yaleiden.nwsdata.pointLocations
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -34,8 +35,10 @@ class ForecastViewModel : ViewModel() {
 
     fun getNwsHourlyForecast() {
 
+        val pointLocations = PointLocations()
+        location = pointLocations.names[0]
         //NwsApi.listLocation = 0
-        location = NwsApi.location
+        //location = NwsApi.location
         Log.d(TAG, "location = " + location)
         viewModelScope.launch {
             Log.d(TAG, "viewModelScope.launch")
