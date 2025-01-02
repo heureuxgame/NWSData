@@ -37,6 +37,8 @@ var BASE_URL = "https://api.weather.gov/gridpoints/CAE/14,41/forecast/"
 
 //private val UA = System.getProperty("http.agent")  // Get android user agent.
 
+var locArrayPosition:Int = 0
+
 
 val userAgentInterceptor = UserAgentInterceptor()
 //val pointLocations = PointLocations()
@@ -70,7 +72,5 @@ object NwsApi {
     }
     //var listLocation = 0
     val location = LOCATION
-
-    //var location = pointLocations.names[listLocation]
 
 }
