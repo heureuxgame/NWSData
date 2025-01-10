@@ -7,8 +7,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -18,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yaleiden.nwsdata.ForecastHourlyData
+import com.yaleiden.nwsdata.NwsApi
+import com.yaleiden.nwsdata.PointLocations
 import com.yaleiden.nwsdata.R
 import com.yaleiden.nwsdata.databinding.FragmentWeatherBinding
 import java.time.OffsetDateTime
@@ -34,6 +39,8 @@ class ForecastFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var hourlyData: List<ForecastHourlyData>
     private val forecastViewModel: ForecastViewModel by viewModels()
+    private var loc_position:Int = 0
+    private lateinit var spinner_location: Spinner
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,27 +54,62 @@ class ForecastFragment : Fragment() {
         val recyclerView: RecyclerView = root.findViewById(R.id.recyclerview)
         val adapter = HourlyAdapter()
         val progress: ProgressBar = root.findViewById(R.id.progressBar)
+        PointLocations.instance.position = "0"
         Log.d(TAG, "before homeViewModel.data.observe ")
 
         forecastViewModel.data.observe(viewLifecycleOwner) {
             hourlyData = it
-            val text_home: TextView = root.findViewById(R.id.text_home)
+            spinner_location = root.findViewById(R.id.text_home)
+            Log.d(TAG, "forecastViewModel.data " + "spinner_location " + PointLocations.instance.position)
+            spinner_location.setSelection(PointLocations.instance.position.toInt())
+            getActivity()?.let { it1 ->
+
+                ArrayAdapter.createFromResource(
+                    it1,
+                    R.array.locs,
+                    //PointLocations.instance.namesArray,
+                    android.R.layout.simple_spinner_item
+                ).also { adapter ->
+                    // Specify the layout to use when the list of choices appears.
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    // Apply the adapter to the spinner.
+                    spinner_location.adapter = adapter
+                }
+            }
+/*
+            spinner_location.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    Log.d(TAG, "spinner onItemSelected")
+                    PointLocations.instance.position = position.toString()
+                    spinner_location.setSelection(PointLocations.instance.position.toInt())
+                    forecastViewModel.getNwsHourlyForecast()
+                }
+
+            }
+*/
+
+
             if (hourlyData != null) {
                 Log.d(TAG, "hourlyData != null " + hourlyData)
 
                 if (hourlyData.isEmpty()) {
-                    text_home.text = "Loading forecast"
+                    //text_home.
                 } else {
                     Log.d(TAG, "adapter.submitList(hourlyData) ")
                     adapter.submitList(hourlyData)
                     adapter.notifyDataSetChanged()
 
-                    text_home.text =  forecastViewModel.location //Top UI Banner
+                    //text_home.text =  forecastViewModel.location //Top UI Banner
+
                     progress.visibility = View.GONE    //Remove progress when loaded
                 }
             } else {
 
-                text_home.text = "Refresh Data"
+                //text_home.text = "Refresh Data"
             }
 
         }
@@ -83,21 +125,33 @@ class ForecastFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val fab: View = requireView().findViewById(R.id.fab_btn)
         fab.setOnClickListener(){
+            Log.d(TAG, "onViewCreated onClickRefresh() spinner_location " + PointLocations.instance.position)
             onClickRefresh()
         }
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "onResume before spinner_location " + PointLocations.instance.position)
+        spinner_location.setSelection(PointLocations.instance.position.toInt())
+        Log.d(TAG, "onResume after spinner_location " + PointLocations.instance.position)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Log.d(TAG, "onDestroyView spinner_location " + PointLocations.instance.position)
         _binding = null
     }
 
     private fun onClickRefresh() {
-        forecastViewModel.getNwsHourlyForecast()
+        Log.d(TAG, "onClickRefresh 1 spinner_location " + PointLocations.instance.position)
+        val position = spinner_location.selectedItemPosition
+        Log.d(TAG, "onClickRefresh 2 spinner_location " + PointLocations.instance.position)
+        PointLocations.instance.position = position.toString();
+        Log.d(TAG, "onClickRefresh 3 spinner_location " + PointLocations.instance.position)
+        Log.d(TAG, "onClickRefresh  getLoc " + PointLocations.instance.getLoc())
+        forecastViewModel.getNwsHourlyForecast(PointLocations.instance.position.toInt())
+
     }
 
     class ForecastDiffCallback : DiffUtil.ItemCallback<ForecastHourlyData>() {
@@ -106,10 +160,10 @@ class ForecastFragment : Fragment() {
             newItem: ForecastHourlyData
         ): Boolean {
 
-            Log.d(
-                "ForecastDiffCallback",
-                " areItemsTheSame " + oldItem.number + " " + newItem.number
-            )
+           // Log.d(
+           //     "ForecastDiffCallback",
+           //     " areItemsTheSame " + oldItem.number + " " + newItem.number
+          //  )
             return oldItem.number == newItem.number
         }
 
@@ -117,10 +171,10 @@ class ForecastFragment : Fragment() {
             oldItem: ForecastHourlyData,
             newItem: ForecastHourlyData
         ): Boolean {
-            Log.d(
-                "ForecastDiffCallback",
-                " areContentsTheSame " + oldItem.startTime + " " + newItem.startTime
-            )
+            //Log.d(
+           //     "ForecastDiffCallback",
+            //    " areContentsTheSame " + oldItem.startTime + " " + newItem.startTime
+            //)
             return oldItem.startTime == newItem.startTime
                     && oldItem.endTime == newItem.endTime
                     && oldItem.shortForecast == newItem.shortForecast
