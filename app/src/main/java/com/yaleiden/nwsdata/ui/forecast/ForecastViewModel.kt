@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yaleiden.nwsdata.ForecastHourlyData
 import com.yaleiden.nwsdata.NwsApi
-import com.yaleiden.nwsdata.NwsApiService
 import com.yaleiden.nwsdata.PointLocations
 import com.yaleiden.nwsdata.SunApi
 //import com.yaleiden.nwsdata.pointLocations
@@ -37,21 +36,17 @@ class ForecastViewModel : ViewModel() {
     //  Location name to go along with point forecast
     lateinit var location: String
     lateinit var sun_times: String
+    fun getNwsHourlyForecast(spinner_position:Int) {
 
-    fun getNwsHourlyForecast() {
 
-        val pointLocations = PointLocations()
-        location = pointLocations.names[0]
-        //NwsApi.listLocation = 0
-        //location = NwsApi.location
-        Log.d(TAG, "location = " + location)
         viewModelScope.launch {
             Log.d(TAG, "viewModelScope.launch")
-
+            PointLocations.instance.position = spinner_position.toString()
             var errorMsg: String = "No Error"
             try {
 
                 val response: Response<String> = NwsApi.retrofitService.getHourlyForecast()
+                Log.d(TAG, "viewModelScope.launch spinner_location " + PointLocations.instance.position)
                 if (response.isSuccessful) {
                     Log.d(TAG, "response.isSuccessful ")
                     Log.d(TAG, response.toString())
@@ -134,6 +129,7 @@ class ForecastViewModel : ViewModel() {
      * Call getNwsHourlyForecast() on init so we can display status immediately.
      */
     init {
+
         getNwsHourlyForecast()
 
     }
@@ -198,5 +194,7 @@ class ForecastViewModel : ViewModel() {
         }
         return final  //day icon name
     }
+
+
 
 }
