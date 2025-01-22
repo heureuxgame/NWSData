@@ -52,7 +52,9 @@ class ForecastFragment : Fragment() {
         val recyclerView: RecyclerView = root.findViewById(R.id.recyclerview)
         val adapter = HourlyAdapter()
         val progress: ProgressBar = root.findViewById(R.id.progressBar)
-        PointLocations.instance.position = "0"
+        val text_home: TextView = root.findViewById(R.id.text_home)
+        val sunrise_tv: TextView = root.findViewById(R.id.sunrise_tv)
+        //PointLocations.instance.position = "0"
         Log.d(TAG, "before homeViewModel.data.observe ")
 
         forecastViewModel.data.observe(viewLifecycleOwner) {
@@ -69,10 +71,8 @@ class ForecastFragment : Fragment() {
                     adapter.notifyDataSetChanged()
 
                     text_home.text =  forecastViewModel.location //Top UI Banner
+                    //sunrise_tv.text = forecastViewModel.suntime.value.toString()
                     sunrise_tv.text = forecastViewModel.suntime.value.toString()
-
-           
-
                     progress.visibility = View.GONE    //Remove progress when loaded
                 }
             } else {
@@ -93,21 +93,19 @@ class ForecastFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val fab: View = requireView().findViewById(R.id.fab_btn)
         fab.setOnClickListener(){
-            Log.d(TAG, "onViewCreated onClickRefresh() spinner_location " + PointLocations.instance.position)
+            //Log.d(TAG, "onViewCreated onClickRefresh() spinner_location " + PointLocations.instance.position)
             onClickRefresh()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume before spinner_location " + PointLocations.instance.position)
-        spinner_location.setSelection(PointLocations.instance.position.toInt())
-        Log.d(TAG, "onResume after spinner_location " + PointLocations.instance.position)
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d(TAG, "onDestroyView spinner_location " + PointLocations.instance.position)
+        //Log.d(TAG, "onDestroyView spinner_location " + PointLocations.instance.position)
         _binding = null
     }
 
