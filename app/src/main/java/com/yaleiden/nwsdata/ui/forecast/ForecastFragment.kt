@@ -34,6 +34,7 @@ class ForecastFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var hourlyData: List<ForecastHourlyData>
     private val forecastViewModel: ForecastViewModel by viewModels()
+    //private lateinit var suntimes: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +53,7 @@ class ForecastFragment : Fragment() {
         forecastViewModel.data.observe(viewLifecycleOwner) {
             hourlyData = it
             val text_home: TextView = root.findViewById(R.id.text_home)
+            val sunrise_tv: TextView = root.findViewById(R.id.sunrise_tv)
             if (hourlyData != null) {
                 Log.d(TAG, "hourlyData != null " + hourlyData)
 
@@ -63,6 +65,7 @@ class ForecastFragment : Fragment() {
                     adapter.notifyDataSetChanged()
 
                     text_home.text =  forecastViewModel.location //Top UI Banner
+                    sunrise_tv.text = forecastViewModel.suntime.value.toString()
                     progress.visibility = View.GONE    //Remove progress when loaded
                 }
             } else {
@@ -98,6 +101,7 @@ class ForecastFragment : Fragment() {
 
     private fun onClickRefresh() {
         forecastViewModel.getNwsHourlyForecast()
+
     }
 
     class ForecastDiffCallback : DiffUtil.ItemCallback<ForecastHourlyData>() {

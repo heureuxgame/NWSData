@@ -9,6 +9,7 @@ import com.yaleiden.nwsdata.ForecastHourlyData
 import com.yaleiden.nwsdata.NwsApi
 import com.yaleiden.nwsdata.NwsApiService
 import com.yaleiden.nwsdata.PointLocations
+import com.yaleiden.nwsdata.SunApi
 //import com.yaleiden.nwsdata.pointLocations
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -28,10 +29,14 @@ class ForecastViewModel : ViewModel() {
 
     val data: LiveData<List<ForecastHourlyData>> = _data
 
+    private val _suntime = MutableLiveData<String>()
+
+    val suntime: LiveData<String> = _suntime
+
+
     //  Location name to go along with point forecast
     lateinit var location: String
-    //val location: String = NwsApi.location
-    //NwsApi.location
+    lateinit var sun_times: String
 
     fun getNwsHourlyForecast() {
 
@@ -94,14 +99,43 @@ class ForecastViewModel : ViewModel() {
 
             Log.d(TAG, "response " + listResult)
 
+            //suntimes
+            try {
+                val responsesun: Response<String> = SunApi.retrofitServiceSun.getSuniseTime()
+                if (responsesun.isSuccessful){
+                    Log.d(TAG, "sun response.isSuccessful ")
+                    Log.d(TAG, responsesun.toString())
+                    lateinit var resultJsonSun: JSONObject
+
+                    Log.d(TAG, "getNwsHourlyForecast() responsesun try")
+                    resultJsonSun =
+                        JSONObject(responsesun.body())
+                    Log.d(TAG, "Sunrise " + resultJsonSun.get("results"))
+                    val results: JSONObject = resultJsonSun.get("results") as JSONObject
+                    val sunriseTime = results.get("sunrise")
+                    val sunsetTime = results.get("sunset")
+                    _suntime.value = sunriseTime.toString().plus("     ").plus(sunsetTime)
+                    Log.d(TAG, "_suntime.value     " + _suntime.value!!)
+                }
+            } catch (e: Exception) {
+                //TODO("Not yet implemented")
+                Log.e(TAG, e.toString())
+                e.printStackTrace()
+            }
+
         }
+
+
     }
+
+
 
     /**
      * Call getNwsHourlyForecast() on init so we can display status immediately.
      */
     init {
         getNwsHourlyForecast()
+
     }
 
     private fun makePeriods(jsonArray: JSONArray): ArrayList<ForecastHourlyData> {
