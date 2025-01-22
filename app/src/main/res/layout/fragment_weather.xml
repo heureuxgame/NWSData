@@ -21,12 +21,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sunrise_tv"
+        android:text="Sunrise"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/text_home" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_home">
+        app:layout_constraintTop_toBottomOf="@id/sunrise_tv">
 
     </androidx.recyclerview.widget.RecyclerView>
 
