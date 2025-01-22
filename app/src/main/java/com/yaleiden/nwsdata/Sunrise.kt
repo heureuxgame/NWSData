@@ -44,9 +44,9 @@ private val retrofitsun = Retrofit.Builder()
 
     //.baseUrl(pointLocations.points[NwsApi.listLocation])
     .build()
-
+// 33.656435, -82.426461 Little River off Winfield CG boat ramp
 interface SunApiService {
-    @GET("json?lat=37.7749F&lng=-122.4194F&date=today&tzid=America/New_York")
+    @GET("json?lat=33.656435F&lng=-82.426461F&date=today&tzid=America/New_York")
     suspend fun getSuniseTime(): Response<String>
 
 }
