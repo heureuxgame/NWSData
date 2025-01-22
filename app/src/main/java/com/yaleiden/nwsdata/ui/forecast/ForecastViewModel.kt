@@ -7,9 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yaleiden.nwsdata.ForecastHourlyData
 import com.yaleiden.nwsdata.NwsApi
-import com.yaleiden.nwsdata.PointLocations
 import com.yaleiden.nwsdata.SunApi
-//import com.yaleiden.nwsdata.pointLocations
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
@@ -35,17 +33,39 @@ class ForecastViewModel : ViewModel() {
 
     //  Location name to go along with point forecast
     var location: String = "Clay Hill, GA"
-    //lateinit var sun_times: String
     fun getNwsHourlyForecast() {
-
 
         viewModelScope.launch {
             Log.d(TAG, "viewModelScope.launch")
             var errorMsg: String = "No Error"
+
+            //suntimes
+            try {
+                val responsesun: Response<String> = SunApi.retrofitServiceSun.getSuniseTime()
+                if (responsesun.isSuccessful){
+
+                    Log.d(TAG, "responsesun " + responsesun.toString())
+                    lateinit var resultJsonSun: JSONObject
+
+                    resultJsonSun = JSONObject(responsesun.body())
+
+                    Log.d(TAG, "Sunrise " + resultJsonSun.get("results"))
+                    val results: JSONObject = resultJsonSun.get("results") as JSONObject
+                    val sunriseTime = results.get("sunrise")
+                    val sunsetTime = results.get("sunset")
+                    _suntime.value = sunriseTime.toString().plus("     ").plus(sunsetTime)
+                    Log.d(TAG, "_suntime.value     " + _suntime.value!!)
+
+                }
+            } catch (e: Exception) {
+                //TODO("Not yet implemented")
+                Log.e(TAG, e.toString())
+                e.printStackTrace()
+            }
+
             try {
 
                 val response: Response<String> = NwsApi.retrofitService.getHourlyForecast()
-                //Log.d(TAG, "viewModelScope.launch spinner_location " + PointLocations.instance.position)
                 if (response.isSuccessful) {
                     Log.d(TAG, "response.isSuccessful ")
                     Log.d(TAG, response.toString())
@@ -69,9 +89,8 @@ class ForecastViewModel : ViewModel() {
                     Log.d(TAG, "propertiesJson " + propertiesJson)
 
                     val periodsJson = propertiesJson.getJSONArray("periods")
-                    //Log.d(TAG, "periodsJson " + periodsJson)
-                    //Log.d(TAG, "periodsJson length" + periodsJson.length())
                     _data.value = makePeriods(periodsJson)
+
                 } else {
                     Log.d(TAG, "getNwsHourlyForecast() else")
                     val errorData = ForecastHourlyData()
@@ -93,36 +112,9 @@ class ForecastViewModel : ViewModel() {
 
             Log.d(TAG, "response " + listResult)
 
-            //suntimes
-            try {
-                val responsesun: Response<String> = SunApi.retrofitServiceSun.getSuniseTime()
-                if (responsesun.isSuccessful){
-                    Log.d(TAG, "sun response.isSuccessful ")
-                    Log.d(TAG, responsesun.toString())
-                    lateinit var resultJsonSun: JSONObject
-
-                    Log.d(TAG, "getNwsHourlyForecast() responsesun try")
-                    resultJsonSun =
-                        JSONObject(responsesun.body())
-                    Log.d(TAG, "Sunrise " + resultJsonSun.get("results"))
-                    val results: JSONObject = resultJsonSun.get("results") as JSONObject
-                    val sunriseTime = results.get("sunrise")
-                    val sunsetTime = results.get("sunset")
-                    _suntime.value = sunriseTime.toString().plus("     ").plus(sunsetTime)
-                    Log.d(TAG, "_suntime.value     " + _suntime.value!!)
-                }
-            } catch (e: Exception) {
-                //TODO("Not yet implemented")
-                Log.e(TAG, e.toString())
-                e.printStackTrace()
-            }
-
         }
 
-
     }
-
-
 
     /**
      * Call getNwsHourlyForecast() on init so we can display status immediately.

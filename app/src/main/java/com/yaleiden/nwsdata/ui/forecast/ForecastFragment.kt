@@ -67,12 +67,14 @@ class ForecastFragment : Fragment() {
                     //text_home.
                 } else {
                     Log.d(TAG, "adapter.submitList(hourlyData) ")
+
+
                     adapter.submitList(hourlyData)
                     adapter.notifyDataSetChanged()
 
                     text_home.text =  forecastViewModel.location //Top UI Banner
-                    //sunrise_tv.text = forecastViewModel.suntime.value.toString()
                     sunrise_tv.text = forecastViewModel.suntime.value.toString()
+
                     progress.visibility = View.GONE    //Remove progress when loaded
                 }
             } else {
