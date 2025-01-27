@@ -1,4 +1,4 @@
-.gradle
+/.gradle
 **/build/
 !src/**/build/
 
@@ -17,5 +17,6 @@ gradle-app.setting
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
-.idea
+
 src/main/java/com/yaleiden/nwsdata/Constants.kt
+/.idea/
