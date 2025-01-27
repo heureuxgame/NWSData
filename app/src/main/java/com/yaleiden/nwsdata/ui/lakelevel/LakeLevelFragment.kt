@@ -39,6 +39,10 @@ class LakeLevelFragment : Fragment() {
         }
 
         val lakeLevelWebView = binding.lakeLevelWebView
+        val webSettings = lakeLevelWebView.settings
+        webSettings.setSupportZoom(true)
+        webSettings.builtInZoomControls = true
+        webSettings.displayZoomControls = false
         lakeLevelWebView.loadUrl("https://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=02193900&parm_cd=00062&period=7")
         return root
     }

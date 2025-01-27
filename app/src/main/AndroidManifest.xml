@@ -14,6 +14,7 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.NWSData"
         tools:targetApi="31">
+       
         <activity
             android:name=".MainActivity"
             android:exported="true">
