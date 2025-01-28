@@ -17,6 +17,10 @@ gradle-app.setting
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
+.idea/
 
-src/main/java/com/yaleiden/nwsdata/Constants.kt
-/.idea/
+/app/src/main/java/com/yaleiden/nwsdata/Constants.kt
+/.idea/libraries/
+
+# Proguard configuration files
+proguard-rules.pro
