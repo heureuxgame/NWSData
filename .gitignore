@@ -24,3 +24,6 @@ gradle-app.setting
 
 # Proguard configuration files
 proguard-rules.pro
+
+
+local.properties
