@@ -7,11 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -20,9 +17,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.yaleiden.nwsdata.ForecastHourlyData
-import com.yaleiden.nwsdata.NwsApi
-import com.yaleiden.nwsdata.PointLocations
 import com.yaleiden.nwsdata.R
 import com.yaleiden.nwsdata.databinding.FragmentWeatherBinding
 import java.time.OffsetDateTime
@@ -74,6 +70,7 @@ class ForecastFragment : Fragment() {
 
                     text_home.text =  forecastViewModel.location //Top UI Banner
                     sunrise_tv.text = forecastViewModel.suntime.value.toString()
+                    showSunriseAttribution()
 
                     progress.visibility = View.GONE    //Remove progress when loaded
                 }
@@ -286,5 +283,14 @@ class ForecastFragment : Fragment() {
         //val textView_detailForecast: TextView = view.findViewById(R.id.textView_detailForecast)
     }
 
+    fun showSunriseAttribution() {
+        val snackbar = activity?.let {
+            Snackbar
+                .make(it.findViewById(android.R.id.content), "Powered by SunriseSunset.io", Snackbar.LENGTH_LONG)
+        }
+        if (snackbar != null) {
+            snackbar.show()
+        }
+    }
 
 }
