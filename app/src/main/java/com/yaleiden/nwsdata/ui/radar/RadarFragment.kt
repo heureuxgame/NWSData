@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.yaleiden.nwsdata.R
 import com.yaleiden.nwsdata.databinding.FragmentRadarBinding
 
 
@@ -18,6 +19,7 @@ class RadarFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    //private val radarWebView = binding.radarWebView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +39,8 @@ class RadarFragment : Fragment() {
 
         val radarWebView = binding.radarWebView
         radarWebView.settings.javaScriptEnabled = true
+
+
         // Standard low bandwidth gif KCAE
         //val urlstring = "https://radar.weather.gov/ridge/standard/KCAE_loop.gif"
         // Standard low bandwidth gif Southeast
@@ -54,6 +58,7 @@ class RadarFragment : Fragment() {
 
         return root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

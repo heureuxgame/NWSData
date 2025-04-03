@@ -14,12 +14,12 @@ import com.yaleiden.nwsdata.databinding.FragmentLakeLevelBinding
 class LakeLevelFragment : Fragment() {
 
     private val tag: String = "LakeLevelFragment"
-    private val testchange: String = "Test Chage"
     private var _binding: FragmentLakeLevelBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val levelUrl: String = "https://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=02193900&parm_cd=00062&period=7"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +43,7 @@ class LakeLevelFragment : Fragment() {
         webSettings.setSupportZoom(true)
         webSettings.builtInZoomControls = true
         webSettings.displayZoomControls = false
-        lakeLevelWebView.loadUrl("https://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=02193900&parm_cd=00062&period=7")
+        lakeLevelWebView.loadUrl(levelUrl)
         return root
     }
 
@@ -57,7 +57,8 @@ class LakeLevelFragment : Fragment() {
 
     private fun onClickRefresh() {
         val lakeLevelWebView = binding.lakeLevelWebView
-        lakeLevelWebView.loadUrl("https://waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&site_no=02193900&parm_cd=00062&period=7")
+        lakeLevelWebView.loadUrl(levelUrl)
+        Log.d(tag, "onClickRefresh Refresh webview")
     }
 
     override fun onDestroyView() {
