@@ -1,22 +1,15 @@
 package com.yaleiden.nwsdata
 
-class PointLocations private constructor() {
+object PointLocations {
 
-    companion object {
-        val instance:PointLocations by lazy {
-            PointLocations()
-        }
-    }
-
-    fun getName() = names[position.toInt()]
-    fun getLoc() = points[position.toInt()]
-
-    var position:String = "0"
-
-    var names = arrayListOf<String>("Clay Hill, GA", "Hawks Rest BTNF, WY")
-    public var points = arrayListOf<String>(
-        "https://api.weather.gov/gridpoints/CAE/14,41/forecast/",
-        "https://api.weather.gov/gridpoints/RIW/67,165/forecast/"
+    val forecastUrls = arrayListOf(
+        "gridpoints/CAE/14,41/forecast/hourly",
+        "gridpoints/RIW/67,165/forecast/hourly",
+        "gridpoints/CHS/30,72/forecast/hourly",
+        "gridpoints/LIX/90,122/forecast/hourly",
+        "gridpoints/AFG/379,356/forecast/hourly"
     )
+
+
 
 }

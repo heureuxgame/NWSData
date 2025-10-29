@@ -7,8 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -36,6 +38,9 @@ class ForecastFragment : Fragment() {
     private lateinit var hourlyData: List<ForecastHourlyData>
     private val forecastViewModel: ForecastViewModel by viewModels()
 
+    private lateinit var locationSpinner: Spinner
+    private lateinit var progress: ProgressBar
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,10 +52,14 @@ class ForecastFragment : Fragment() {
         val root: View = binding.root
         val recyclerView: RecyclerView = root.findViewById(R.id.recyclerview)
         val adapter = HourlyAdapter()
-        val progress: ProgressBar = root.findViewById(R.id.progressBar)
-        val text_home: TextView = root.findViewById(R.id.text_home)
+        //progress = root.findViewById(R.id.progressBar)
+        progress = root.findViewById(R.id.progressBar)
+        locationSpinner = root.findViewById(R.id.text_home)
+
         val sunrise_tv: TextView = root.findViewById(R.id.sunrise_tv)
         //PointLocations.instance.position = "0"
+        observeViewModel()
+
         Log.d(TAG, "before homeViewModel.data.observe ")
 
         forecastViewModel.data.observe(viewLifecycleOwner) {
@@ -68,15 +77,14 @@ class ForecastFragment : Fragment() {
                     adapter.submitList(hourlyData)
                     adapter.notifyDataSetChanged()
 
-                    text_home.text =  forecastViewModel.location //Top UI Banner
+                    //text_home.setSelection(ForecastViewModel.location) //Top UI Banner
                     sunrise_tv.text = forecastViewModel.suntime.value.toString()
                     showSunriseAttribution()
 
-                    progress.visibility = View.GONE    //Remove progress when loaded
+                    //progress.visibility = View.GONE    //Remove progress when loaded
                 }
             } else {
-
-                //text_home.text = "Refresh Data"
+                //
             }
 
         }
@@ -95,6 +103,37 @@ class ForecastFragment : Fragment() {
             //Log.d(TAG, "onViewCreated onClickRefresh() spinner_location " + PointLocations.instance.position)
             onClickRefresh()
         }
+        // 2. CORRECT WAY: Observe the LiveData
+        // The observer is triggered every time the value in the ViewModel changes,
+        // and it provides the raw 'index' (an Int) needed for setSelection.
+        forecastViewModel.locationIndex.observe(viewLifecycleOwner) { index ->
+            // 'index' is the Int value extracted from the LiveData container.
+            locationSpinner.setSelection(index)
+        }
+
+        // 3. Set the listener to update the ViewModel when the user selects an item
+        locationSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // This updates the LiveData in the ViewModel
+                forecastViewModel.setLocationIndex(position)
+                Log.d(TAG, "locationSpinner position = " + position)
+                // call for new forecast
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Not usually required
+            }
+        }
+
+        // This observer waits for the URL to be updated via Transformations.map in the ViewModel.
+        forecastViewModel.selectedForecastUrl.observe(viewLifecycleOwner) { url ->
+            // Log the URL that is actually being used for the API call
+            Log.d(TAG, "Selected Forecast URL changed to: $url")
+
+            // Once the URL is guaranteed to be correct, trigger the API fetch.
+            forecastViewModel.getNwsHourlyForecast()
+        }
     }
 
     override fun onResume() {
@@ -108,6 +147,21 @@ class ForecastFragment : Fragment() {
         _binding = null
     }
 
+    private fun observeViewModel() {
+        forecastViewModel.isLoading.observe(viewLifecycleOwner) { isFetching ->
+            // isFetching is the Boolean value from the ViewModel's LiveData
+            if (isFetching) {
+                // Show the progress bar and optionally hide other content
+                progress.visibility = View.VISIBLE
+                //forecastList.visibility = View.GONE
+            } else {
+                // Hide the progress bar and show the content
+                progress.visibility = View.GONE
+                //forecastList.visibility = View.VISIBLE
+            }
+        }
+    }
+
     private fun onClickRefresh() {
       forecastViewModel.getNwsHourlyForecast()
 
@@ -119,10 +173,6 @@ class ForecastFragment : Fragment() {
             newItem: ForecastHourlyData
         ): Boolean {
 
-           // Log.d(
-           //     "ForecastDiffCallback",
-           //     " areItemsTheSame " + oldItem.number + " " + newItem.number
-          //  )
             return oldItem.number == newItem.number
         }
 
@@ -139,7 +189,6 @@ class ForecastFragment : Fragment() {
                     && oldItem.shortForecast == newItem.shortForecast
                     && oldItem.temperature == newItem.temperature
                     && oldItem.icon == newItem.icon
-
         }
 
         override fun getChangePayload(

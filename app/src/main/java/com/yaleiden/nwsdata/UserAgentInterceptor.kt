@@ -22,5 +22,4 @@ class UserAgentInterceptor : Interceptor {
         return chain.proceed(requestWithUserAgent)
     }
 
-
 }

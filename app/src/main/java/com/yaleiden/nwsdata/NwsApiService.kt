@@ -1,10 +1,12 @@
 package com.yaleiden.nwsdata
 
+import com.yaleiden.nwsdata.ui.forecast.ForecastViewModel
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Url
 
 
 /*
@@ -24,11 +26,11 @@ this is your gridpoint
 //private val BASE_URL = "https://api.weather.gov/gridpoints/CAE/15,40/forecast/"
 
 // Location for Clay Hill, GA
-var LOCATION = "Clay Hill, GA"
-var BASE_URL = "https://api.weather.gov/gridpoints/CAE/14,41/forecast/"
-
-val loc_array = arrayOf("Clay Hill, GA","Hawks Rest BTNF, WY")
-val url_array = arrayOf("https://api.weather.gov/gridpoints/CAE/14,41/forecast/","https://api.weather.gov/gridpoints/RIW/67,165/forecast/")
+//var LOCATION = "Clay Hill, GA"
+// var BASE_URL = "https://api.weather.gov/gridpoints/CAE/14,41/forecast/"
+var BASE_URL = "https://api.weather.gov/"
+//val loc_array = arrayOf("Clay Hill, GA","Hawks Rest BTNF, WY")
+//val url_array = arrayOf("https://api.weather.gov/gridpoints/CAE/14,41/forecast/","https://api.weather.gov/gridpoints/RIW/67,165/forecast/")
 // Location for Hawks Rest USFS Patrol Cabin, Bridger-Teton NF, WY
 //const val LOCATION = "Hawks Rest BTNF, WY"
 //private val BASE_URL = "https://api.weather.gov/gridpoints/RIW/67,165/forecast/"
@@ -51,12 +53,12 @@ var okHttpClient = OkHttpClient()
 public var retrofit = Retrofit.Builder()
     .client(okHttpClient)
     .addConverterFactory(ScalarsConverterFactory.create())
-    .baseUrl(PointLocations.instance.getLoc())
+    .baseUrl(BASE_URL)
     .build()
 
 interface NwsApiService {
-    @GET("hourly")
-    suspend fun getHourlyForecast(): Response<String>
+    @GET()
+    suspend fun getHourlyForecast(@Url url: String): Response<String>
 
 }
 
