@@ -1,14 +1,17 @@
-<layer-list
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <item
+        android:bottom="20dp"
+        android:drawable="@drawable/reel_handle_android_body"
+        android:left="20dp"
+        android:right="20dp"
+        android:top="20dp" />
     <item>
-    <animated-rotate
-        android:drawable="@drawable/reel_handle_android"
-        android:pivotX="50%"
-        android:pivotY="50%"
-
-        tools:framesPerSecond="20"
-        />
+        <animated-rotate
+            android:drawable="@drawable/reel_handle_android"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            tools:framesPerSecond="20" />
     </item>
 </layer-list>

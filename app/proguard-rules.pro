@@ -20,3 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+## ULTIMATE FIX: Target the R class using the exact applicationId.
+## REPLACE 'com.example.weatherapp' with the exact applicationId from your build.gradle
+-keep class com.yaleiden.nwsdata.R$* {
+    public static final int *;
+}

@@ -10,15 +10,19 @@ android {
         applicationId "com.yaleiden.nwsdata"
         minSdk 28
         targetSdk 36
-        versionCode 6
-        versionName "1.5"
+        versionCode 22
+        versionName "1.21"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            // Enables code-related app optimization.
+            minifyEnabled true
+
+            // Enables resource shrinking.
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -240,7 +241,8 @@ class ForecastFragment : Fragment() {
             //holder.textView_detailForecast.text = listData.detailedForecast
             val imageName = checkForComma(listData.icon)
             Log.d(TAG, "startTime " + listData.startTime)
-            holder.imageViewIcon.setImageDrawable(getDrawableByName(imageName, context!!))
+            val context = holder.itemView.context // Use the context from the ViewHolder's root view
+            holder.imageViewIcon.setImageDrawable(getDrawableByName(imageName, context))
             //Log.d(TAG, "onBindViewHolder detail" + listData.detailedForecast)
 
         }
@@ -249,8 +251,10 @@ class ForecastFragment : Fragment() {
         fun getDrawableByName(name: String, context: Context): Drawable? {
 
             Log.d(TAG, "getDrawableByName " + name)
+            val cleanName = name.replace('-', '_')
+            Log.d(TAG, "context.packageName " + context.packageName )
             var drawableResource =
-                context.resources.getIdentifier(name, "drawable", context.packageName)
+                context.resources.getIdentifier(cleanName, "drawable", context.packageName)
             /*
             If an icon is not found or is mispelled, add generic icon "ic_missing"
              */
@@ -263,7 +267,8 @@ class ForecastFragment : Fragment() {
                 Check for spelling.  Descriptions found here https://w1.weather.gov/xml/current_obs/weather.php
                  */
             }
-            return ContextCompat.getDrawable(activity!!, drawableResource)
+            //return ContextCompat.getDrawable(activity!!, drawableResource)
+            return AppCompatResources.getDrawable( context, drawableResource)
         }
 
         fun checkForComma(icon: String): String {
@@ -283,8 +288,10 @@ class ForecastFragment : Fragment() {
                 // this is the percentage chance, but NOT part of the drawable name
                 percentage = icon.substringAfter(",")
             }
+            val cleanName = name.replace('-', '_')
             Log.d(TAG, "Normal " + name)
-            return name
+
+            return cleanName
         }
 
         fun checkForEnhanced(icon: String): String {
