@@ -13,7 +13,6 @@ import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DiffUtil
@@ -78,7 +77,7 @@ class ForecastFragment : Fragment() {
                     adapter.submitList(hourlyData)
                     adapter.notifyDataSetChanged()
 
-                    //text_home.setSelection(ForecastViewModel.location) //Top UI Banner
+
                     sunrise_tv.text = forecastViewModel.suntime.value.toString()
                     showSunriseAttribution()
 
@@ -91,7 +90,7 @@ class ForecastFragment : Fragment() {
         }
 
         recyclerView.adapter = adapter
-        recyclerView.setLayoutManager(LinearLayoutManager(context));
+        recyclerView.setLayoutManager(LinearLayoutManager(context))
 
         return root
 
@@ -214,9 +213,9 @@ class ForecastFragment : Fragment() {
         override fun onBindViewHolder(holder: HourlyViewHolder, position: Int) {
             //Log.d("HomeFragment", "HourlyAdapter onBindViewHolder")
 
-            val listData = currentList.get(position)
+            val listData = currentList[position]
             //2022-09-15T17:00:00-04:00  Example of time date from JSON
-            var dayHour: String = try {
+            val dayHour: String = try {
                 //Get day of week, take the first three letters, add a space
                 OffsetDateTime.parse(listData.startTime).dayOfWeek.toString().take(3).plus(" ")
                     //Get offset time to correct UTC to local
