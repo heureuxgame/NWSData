@@ -3,13 +3,13 @@
 
     <item
         android:bottom="20dp"
-        android:drawable="@drawable/reel_handle_android_body"
+        android:drawable="@drawable/reel__body_new"
         android:left="20dp"
         android:right="20dp"
         android:top="20dp" />
     <item>
         <animated-rotate
-            android:drawable="@drawable/reel_handle_android"
+            android:drawable="@drawable/reel__handle_new"
             android:pivotX="50%"
             android:pivotY="50%"
             tools:framesPerSecond="20" />
