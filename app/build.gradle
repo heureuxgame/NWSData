@@ -13,8 +13,8 @@ android {
         applicationId "com.yaleiden.nwsdata"
         minSdk 28
         targetSdk 36
-        versionCode 23
-        versionName "1.23"
+        versionCode 25
+        versionName "1.25"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -45,6 +45,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
 
