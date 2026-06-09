@@ -11,10 +11,10 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.yaleiden.nwsdata.wear"
+        applicationId = "com.yaleiden.nwsdata"
         minSdk = 30
         targetSdk = 36
-        versionCode = 1
+        versionCode = 1000026
         versionName = "1.0"
 
     }
