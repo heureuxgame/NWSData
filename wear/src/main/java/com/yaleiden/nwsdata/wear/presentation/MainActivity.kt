@@ -1,8 +1,3 @@
-/* While this template provides a good starting point for using Wear Compose, you can always
- * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter to find the
- * most up to date changes to the libraries and their usages.
- */
-
 package com.yaleiden.nwsdata.wear.presentation
 
 import android.os.Bundle
@@ -36,7 +31,6 @@ import com.yaleiden.nwsdata.wear.presentation.theme.EsFISHWXTheme
 
 class MainActivity : ComponentActivity() {
 
-    // Inject your Wear-specific network logic viewmodel
     private val viewModel: WearLakeLevelViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +64,7 @@ fun WearApp(
             contentPadding = contentPadding,
             modifier = Modifier.fillMaxWidth()
         ) {
+            /*
             item {
                 ListHeader(modifier = Modifier.fillMaxWidth()) {
                     Text(
@@ -79,20 +74,33 @@ fun WearApp(
                 }
             }
 
+             */
+
+            // --- New Site Name Subtitle Section ---
             item {
-                // The 'this' keyword here provides the required TransformingLazyColumnItemScope
+                if (uiState is WearUiState.Success) {
+                    Text(
+                        text = uiState.siteName,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp, vertical = 12.dp)
+                            .transformedHeight(this, transformationSpec)
+                    )
+                }
+            }
+
+            item {
                 when (uiState) {
                     is WearUiState.Loading -> {
                         CircularProgressIndicator(
                             modifier = Modifier
                                 .padding(vertical = 16.dp)
-                                .transformedHeight(
-                                    this,
-                                    transformationSpec
-                                ) // 👈 FIXED: Changed columnState to 'this'
+                                .transformedHeight(this, transformationSpec)
                         )
                     }
-
                     is WearUiState.Success -> {
                         Text(
                             text = uiState.latestLevel,
@@ -102,13 +110,9 @@ fun WearApp(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp)
-                                .transformedHeight(
-                                    this,
-                                    transformationSpec
-                                ) // 👈 FIXED: Changed columnState to 'this'
+                                .transformedHeight(this, transformationSpec)
                         )
                     }
-
                     is WearUiState.Error -> {
                         Text(
                             text = uiState.message,
@@ -118,10 +122,7 @@ fun WearApp(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                                .transformedHeight(
-                                    this,
-                                    transformationSpec
-                                ) // 👈 FIXED: Changed columnState to 'this'
+                                .transformedHeight(this, transformationSpec)
                         )
                     }
                 }
@@ -131,63 +132,63 @@ fun WearApp(
                 Button(
                     onClick = onRefreshClick,
                     modifier = Modifier
-                        // 1. Replaced fillMaxWidth() with wrapContentSize() or explicit width to make it narrower
                         .wrapContentSize()
-                        // 2. Added padding to control its definitive clickable sizing safely
                         .padding(horizontal = 32.dp, vertical = 4.dp)
-                        .transformedHeight(
-                            this,
-                            transformationSpec
-                        ), // 👈 FIXED: Changed columnState to 'this'
+                        .transformedHeight(this, transformationSpec),
                     transformation = SurfaceTransformation(transformationSpec)
                 ) {
-                    Text("Refresh",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
+                    Text(
+                        text = "Refresh",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
         }
     }
 }
-// --- Previews Added Below ---
 
-    @WearPreviewDevices
-    @WearPreviewFontScales
-    @Composable
-    fun MainScreenSuccessPreview() {
-        EsFISHWXTheme {
-            AppScaffold {
-                WearApp(
-                    uiState = WearUiState.Success("324.58 ft"),
-                    onRefreshClick = {}
-                )
-            }
+// --- Previews updated with Mock Data ---
+
+@WearPreviewDevices
+@WearPreviewFontScales
+@Composable
+fun MainScreenSuccessPreview() {
+    EsFISHWXTheme {
+        AppScaffold {
+            WearApp(
+                uiState = WearUiState.Success(
+                    siteName = "Clarks Hill near Plumb Branch",
+                    latestLevel = "324.58 ft"
+                ),
+                onRefreshClick = {}
+            )
         }
     }
+}
 
-    @WearPreviewDevices
-    @Composable
-    fun MainScreenLoadingPreview() {
-        EsFISHWXTheme {
-            AppScaffold {
-                WearApp(
-                    uiState = WearUiState.Loading,
-                    onRefreshClick = {}
-                )
-            }
+@WearPreviewDevices
+@Composable
+fun MainScreenLoadingPreview() {
+    EsFISHWXTheme {
+        AppScaffold {
+            WearApp(
+                uiState = WearUiState.Loading,
+                onRefreshClick = {}
+            )
         }
     }
+}
 
-    @WearPreviewDevices
-    @Composable
-    fun MainScreenErrorPreview() {
-        EsFISHWXTheme {
-            AppScaffold {
-                WearApp(
-                    uiState = WearUiState.Error("Network Timeout"),
-                    onRefreshClick = {}
-                )
-            }
+@WearPreviewDevices
+@Composable
+fun MainScreenErrorPreview() {
+    EsFISHWXTheme {
+        AppScaffold {
+            WearApp(
+                uiState = WearUiState.Error("Network Timeout"),
+                onRefreshClick = {}
+            )
         }
     }
+}
