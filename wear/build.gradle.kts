@@ -14,8 +14,8 @@ android {
         applicationId = "com.yaleiden.nwsdata"
         minSdk = 30
         targetSdk = 36
-        versionCode = 1000026
-        versionName = "1.0"
+        versionCode = 1000028
+        versionName = "1.0.1"
 
     }
 
@@ -60,4 +60,5 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.wear.tiles:tiles-renderer:1.5.0")
     debugImplementation("androidx.wear.tiles:tiles-tooling:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.7.3")
 }
