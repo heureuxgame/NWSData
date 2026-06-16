@@ -6,6 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".ui.lakelevel.LakeLevelFragment">
 
+    <WebView
+        android:id="@+id/lakeLevelWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:indeterminateDrawable="@drawable/progress_reel"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:visibility="gone"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_baseline_refresh_24"
+        app:backgroundTint="@color/purple_500"
+        app:elevation="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/text_notifications"
         android:layout_width="match_parent"
@@ -14,29 +47,7 @@
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <WebView
-        android:id="@+id/lakeLevelWebView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/fab_btn"
-        android:layout_margin="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/lakeLevelWebView"
-        app:layout_constraintBottom_toBottomOf="@+id/lakeLevelWebView"
-        app:backgroundTint="@color/purple_500"
-        app:elevation="6dp"
-        android:src="@drawable/ic_baseline_refresh_24"
-        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

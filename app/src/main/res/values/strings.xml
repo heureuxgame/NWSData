@@ -4,15 +4,22 @@
     <string name="title_home">Hourly</string>
     <string name="title_dashboard">Radar</string>
     <string name="title_notifications">Lake Level</string>
+    <string name="refresh">Refresh</string>
+    <string name="sunrise">Sunrise</string>
 
     <string-array name="locs">
         <item>Clay Hill, GA</item>
         <item>Hawks Rest, WY</item>
+        <item>Tuckahoe WMA</item>
+        <item>Pappy Farm, MS</item>
+        <item>Utqiagk, AK</item>
     </string-array>
 
     <string-array name="urls">
         <item>https://api.weather.gov/gridpoints/CAE/14,41/forecast/</item>
         <item>https://api.weather.gov/gridpoints/RIW/67,165/forecast/</item>
+        <item>https://api.weather.gov/gridpoints/CHS/30,72/forecast/</item>
+        <item>https://api.weather.gov/gridpoints/LIX/90,122/forecast/</item>
     </string-array>
 
 </resources>

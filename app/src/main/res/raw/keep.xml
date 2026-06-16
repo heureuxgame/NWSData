@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/bkn,@drawable/blizzard,@drawable/cold,@drawable/du,@drawable/fc,
+    @drawable/few,@drawable/fg,@drawable/fog,@drawable/fu,@drawable/fzra,
+    @drawable/fzra_sn,@drawable/hi_nshwrs,@drawable/hi_ntsra,@drawable/hi_shwrs,@drawable/hi_tsra,
+    @drawable/hot,@drawable/hur_warn,@drawable/hur_watch,@drawable/hz,@drawable/ip,
+    @drawable/minus_ra,@drawable/nbkn,@drawable/nblizzard,@drawable/ncold,@drawable/ndu,
+    @drawable/nfc,@drawable/nfew,@drawable/nfg,@drawable/nfog,@drawable/nfu,
+    @drawable/nfrzra,@drawable/nfrzra_sn,@drawable/nip,@drawable/novc,@drawable/nra,
+    @drawable/nra_frzra,@drawable/nrain,@drawable/nrain_showers,@drawable/nrain_snow,@drawable/nraip,
+    @drawable/nsct,@drawable/nshra,@drawable/nskc,@drawable/nsleet,@drawable/nsnip,
+    @drawable/nsnow,@drawable/ntor,@drawable/ntsra,@drawable/ntsra_hi,@drawable/ntsra_sct,
+    @drawable/nwind_bkn,@drawable/nwind_few,@drawable/nwind_ovc,@drawable/nwind_sct,@drawable/nwind_skc,
+    @drawable/ovc,@drawable/ra,@drawable/ra_frza,@drawable/rain,@drawable/rain_showers,
+    @drawable/rain_snow,@drawable/raip,@drawable/sct,@drawable/sleet,@drawable/snip,
+@drawable/snow,@drawable/tor,@drawable/ts_nowarn,@drawable/ts_warn,@drawable/ts_watch,
+@drawable/tsra,@drawable/tsra_hi,@drawable/tsra_sct,@drawable/wind_bkn,@drawable/wind_few,
+@drawable/wind_ovc,@drawable/wind_sct,@drawable/wind_skc, @drawable/skc" />

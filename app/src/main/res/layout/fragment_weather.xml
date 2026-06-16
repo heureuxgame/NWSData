@@ -7,11 +7,11 @@
     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
     tools:context=".ui.forecast.ForecastFragment">
 
-    <TextView
+    <Spinner
         android:id="@+id/text_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/loc_name"
+        android:entries="@array/locs"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/sunrise_tv"
-        android:text="Sunrise"
+        android:text="@string/sunrise"
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/text_home" />
 
@@ -42,8 +42,9 @@
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:indeterminateDrawable="@drawable/progress_reel"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
         android:layout_marginStart="144dp"
         android:layout_marginTop="144dp"
         android:layout_marginEnd="144dp"
@@ -61,6 +62,7 @@
         app:backgroundTint="@color/purple_500"
         app:elevation="6dp"
         android:src="@drawable/ic_baseline_refresh_24"
+        android:contentDescription="@string/refresh"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
