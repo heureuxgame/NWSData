@@ -1,64 +1,79 @@
 plugins {
-    id("com.android.application")
-    id("com.android.built-in-kotlin")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.builtInKotlin)
+    alias(libs.plugins.kotlin.compose)
 }
 
-android {
+// ✅ Explicitly targets the modern AGP 9.x/10.x API extension
+configure<com.android.build.api.dsl.ApplicationExtension> {
     namespace = "com.yaleiden.nwsdata.wear"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.yaleiden.nwsdata"
         minSdk = 30
         targetSdk = 36
-        versionCode = 1000028
-        versionName = "1.0.1"
-
+        versionCode = 1000029
+        versionName = "1.0.2"
     }
 
     buildTypes {
         release {
-            optimization {
-                enable = false
-            }
+            isMinifyEnabled = true
+            isShrinkResources = true
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
+    // ✅ FIXED: Modern, type-safe API for platform SDK libraries (No warning!)
     useLibrary("wear-sdk")
+
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    implementation(platform("androidx.compose:compose-bom:2025.12.00"))
-    implementation("androidx.activity:activity-compose:1.13.0")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.core:core-splashscreen:1.2.0")
-    implementation("androidx.wear.compose:compose-foundation:1.5.6")
-    implementation("androidx.wear.compose:compose-material3:1.5.6")
-    implementation("androidx.wear.compose:compose-ui-tooling:1.5.6")
-    implementation("androidx.wear.protolayout:protolayout-material3:1.3.0")
-    implementation("androidx.wear.protolayout:protolayout:1.3.0")
-    implementation("androidx.wear.tiles:tiles-tooling-preview:1.5.0")
-    implementation("androidx.wear.tiles:tiles:1.5.0")
-    implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.2.1")
-    implementation("androidx.wear:wear-tooling-preview:1.0.0")
-    implementation("com.google.android.gms:play-services-wearable:20.0.1")
-    implementation("com.google.guava:guava:33.2.1-android")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2025.12.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.wear.tiles:tiles-renderer:1.5.0")
-    debugImplementation("androidx.wear.tiles:tiles-tooling:1.5.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.7.3")
+    // Jetpack Compose BOM
+    implementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+
+    // Core Android / UI / Components
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.core.splashscreen)
+
+    // Wear OS Compose
+    implementation(libs.androidx.wear.compose.foundation)
+    implementation(libs.compose.material3)
+    implementation(libs.androidx.wear.compose.ui.tooling)
+    implementation(libs.wear.tooling.preview)
+
+    // Wear Protolayout & Tiles
+    implementation(libs.androidx.wear.protolayout)
+    implementation(libs.androidx.wear.protolayout.material3)
+    implementation(libs.tiles)
+    implementation(libs.tiles.tooling.preview)
+
+    // Watchfaces & Play Services
+    implementation(libs.watchface.complications.data.source.ktx)
+    implementation(libs.play.services.wearable)
+
+    // Concurrency & Collections Utilites
+    implementation(libs.guava)
+    implementation(libs.kotlinx.coroutines.guava)
+
+    // Development & Testing Implementations
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    debugImplementation(libs.tiles.renderer)
+    debugImplementation(libs.tiles.tooling)
+
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 }
