@@ -64,24 +64,14 @@ fun WearApp(
             contentPadding = contentPadding,
             modifier = Modifier.fillMaxWidth()
         ) {
-            /*
-            item {
-                ListHeader(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = "Lake Level",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
-            }
 
-             */
 
             // --- New Site Name Subtitle Section ---
             item {
                 if (uiState is WearUiState.Success) {
                     Text(
                         text = uiState.siteName,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
@@ -105,7 +95,7 @@ fun WearApp(
                         Text(
                             text = uiState.latestLevel,
                             style = MaterialTheme.typography.displayMedium,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()

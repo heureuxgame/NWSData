@@ -1,0 +1,33 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Outer Circular Frame -->
+    <path
+        android:pathData="M12,2A10,10 0,1 0,22,12 10,10 0,0 0,12,2Z M12,20A8,8 0,1 1,20,12 8,8 0,0 1,12,20Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Top Water Ripple Line -->
+    <path
+        android:pathData="M6,8 C7,8 7.5,8.5 8.5,8.5 C9.5,8.5 10,8 11,8 C12,8 12.5,8.5 13.5,8.5 C14.5,8.5 15,8 16,8 C17,8 17.5,8.5 18.5,8.5"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1"
+        android:strokeLineCap="round"/>
+
+    <!-- Middle Water Ripple Line -->
+    <path
+        android:pathData="M5.5,11 C6.5,11 7,11.5 8,11.5 C9,11.5 9.5,11 10.5,11 C11.5,11 12,11.5 13,11.5 C14,11.5 14.5,11 15.5,11 C16.5,11 17,11.5 18,11.5"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1"
+        android:strokeLineCap="round"/>
+
+    <!-- Bottom Water Ripple Line -->
+    <path
+        android:pathData="M6,14 C7,14 7.5,14.5 8.5,14.5 C9.5,14.5 10,14 11,14 C12,14 12.5,14.5 13.5,14.5 C14.5,14.5 15,14 16,14 C17,14 17.5,14.5 18.5,14.5"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1"
+        android:strokeLineCap="round"/>
+
+</vector>
