@@ -16,6 +16,7 @@ import com.yaleiden.nwsdata.databinding.FragmentLakeLevelNewBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+//import com.yaleiden.nwsdata.BuildConfig
 
 class LakeLevelFragment : Fragment() {
 
@@ -28,6 +29,7 @@ class LakeLevelFragment : Fragment() {
     private val newlevelUrl: String = "https://waterservices.usgs.gov/nwis/dv/?site=02193900&format=waterml,1.1&ParameterCd=00062&"
     private val newlevelLatestUrl: String = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/latest-continuous/items?monitoring_location_id=USGS-02193900&parameter_code=00062&f=json"
 
+    //private val api_key = BuildConfig.WEATHER_API_KEY
     private var endDate: String = ""
     private var startDate: String = ""
 
