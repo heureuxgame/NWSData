@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
-    //alias(libs.plugins.kotlin.android)
+    //alias(libs.plugins.kotlin.android) // Keep this active!
 }
 
 configure<com.android.build.api.dsl.ApplicationExtension> {
@@ -17,6 +17,9 @@ configure<com.android.build.api.dsl.ApplicationExtension> {
         versionName = "1.27"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val apiKey = project.findProperty("WEATHER_API_KEY")?.toString() ?: ""
+        buildConfigField("String", "WEATHER_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -39,18 +42,17 @@ configure<com.android.build.api.dsl.ApplicationExtension> {
         viewBinding = true
         buildConfig = true
     }
+} // End of ApplicationExtension block
+
+// FIX: Declare the Kotlin extensions using explicit scoping outside the block
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }
 
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
-        }
-    }
-
-
-
-
 dependencies {
+    // ... your unchanged dependencies block stays down here
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.google.material)
@@ -59,13 +61,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
-
-    // Retrofit & JSON
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.scalars)
     implementation(libs.google.gson)
-
-    // Testing
     testImplementation(libs.test.junit)
     androidTestImplementation(libs.androidTest.ext.junit)
     androidTestImplementation(libs.androidTest.espresso)
