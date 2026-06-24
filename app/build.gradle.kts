@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+// APP MODULE
 
 plugins {
     alias(libs.plugins.android.application)

@@ -1,3 +1,4 @@
+// WEAR MODULE
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.android.builtInKotlin)
@@ -15,6 +16,12 @@ configure<com.android.build.api.dsl.ApplicationExtension> {
         targetSdk = 36
         versionCode = 1000029
         versionName = "1.0.2"
+
+        // 1️⃣ GRAB THE KEY LOCALLY INSIDE THE WEAR MODULE
+        //val apiKey = rootProject.findProperty("WEATHER_API_KEY")?.toString() ?: ""
+
+        // 2️⃣ INJECT IT INTO WEAR'S BUILDCONFIG
+        //buildConfigField("String", "WEATHER_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -34,6 +41,7 @@ configure<com.android.build.api.dsl.ApplicationExtension> {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

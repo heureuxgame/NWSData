@@ -8,10 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.Spinner
-import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -23,329 +19,142 @@ import com.google.android.material.snackbar.Snackbar
 import com.yaleiden.nwsdata.ForecastHourlyData
 import com.yaleiden.nwsdata.R
 import com.yaleiden.nwsdata.databinding.FragmentWeatherBinding
+import com.yaleiden.nwsdata.databinding.ItemWeatherHourlyBinding
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
-
 
 class ForecastFragment : Fragment() {
 
     private val TAG: String = "ForecastFragment"
     private var _binding: FragmentWeatherBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var hourlyData: List<ForecastHourlyData>
-    private val forecastViewModel: ForecastViewModel by viewModels()
 
-    private lateinit var locationSpinner: Spinner
-    private lateinit var progress: ProgressBar
+    private val forecastViewModel: ForecastViewModel by viewModels()
+    private val hourlyAdapter = HourlyAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "onCreateView View ")
-
         _binding = FragmentWeatherBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        val recyclerView: RecyclerView = root.findViewById(R.id.recyclerview)
-        val adapter = HourlyAdapter()
-        //progress = root.findViewById(R.id.progressBar)
-        progress = root.findViewById(R.id.progressBar)
-        locationSpinner = root.findViewById(R.id.text_home)
-
-        val sunrise_tv: TextView = root.findViewById(R.id.sunrise_tv)
-        //PointLocations.instance.position = "0"
-        observeViewModel()
-
-        Log.d(TAG, "before homeViewModel.data.observe ")
-
-        forecastViewModel.data.observe(viewLifecycleOwner) {
-            hourlyData = it
-
-            if (hourlyData != null) {
-                Log.d(TAG, "hourlyData != null " + hourlyData)
-
-                if (hourlyData.isEmpty()) {
-                    //text_home.
-                } else {
-                    Log.d(TAG, "adapter.submitList(hourlyData) ")
-
-
-                    adapter.submitList(hourlyData)
-                    adapter.notifyDataSetChanged()
-
-
-                    sunrise_tv.text = forecastViewModel.suntime.value.toString()
-                    showSunriseAttribution()
-
-                    //progress.visibility = View.GONE    //Remove progress when loaded
-                }
-            } else {
-                //
-            }
-
-        }
-
-        recyclerView.adapter = adapter
-        recyclerView.setLayoutManager(LinearLayoutManager(context))
-
-        return root
-
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val fab: View = requireView().findViewById(R.id.fab_btn)
-        fab.setOnClickListener(){
-            //Log.d(TAG, "onViewCreated onClickRefresh() spinner_location " + PointLocations.instance.position)
-            onClickRefresh()
+
+        // Leverage ViewBinding completely for RecyclerView configuration
+        binding.recyclerview.apply {
+            adapter = hourlyAdapter
+            layoutManager = LinearLayoutManager(context)
         }
-        // 2. CORRECT WAY: Observe the LiveData
-        // The observer is triggered every time the value in the ViewModel changes,
-        // and it provides the raw 'index' (an Int) needed for setSelection.
+
+        // Setup Observers
+        observeViewModel()
+
+        // Sync Refresh Fab
+        binding.fabBtn.setOnClickListener {
+            forecastViewModel.getNwsHourlyForecast()
+        }
+
+        // Observe the selection index adjustments safely
         forecastViewModel.locationIndex.observe(viewLifecycleOwner) { index ->
-            // 'index' is the Int value extracted from the LiveData container.
-            locationSpinner.setSelection(index)
+            binding.textHome.setSelection(index)
         }
 
-        // 3. Set the listener to update the ViewModel when the user selects an item
-        locationSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        // Listener to update the ViewModel when selection updates
+        binding.textHome.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // This updates the LiveData in the ViewModel
                 forecastViewModel.setLocationIndex(position)
-                Log.d(TAG, "locationSpinner position = " + position)
-                // call for new forecast
-
+                Log.d(TAG, "locationSpinner position = $position")
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Not usually required
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // This observer waits for the URL to be updated via Transformations.map in the ViewModel.
+        // Observe URL changes to fetch fresh data
         forecastViewModel.selectedForecastUrl.observe(viewLifecycleOwner) { url ->
-            // Log the URL that is actually being used for the API call
             Log.d(TAG, "Selected Forecast URL changed to: $url")
-
-            // Once the URL is guaranteed to be correct, trigger the API fetch.
             forecastViewModel.getNwsHourlyForecast()
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun observeViewModel() {
+        // Toggle global application progress loading indicators
+        forecastViewModel.isLoading.observe(viewLifecycleOwner) { isFetching ->
+            binding.progressBar.visibility = if (isFetching) View.VISIBLE else View.GONE
+        }
 
+        // Clean UI state data delivery observer mapping updates
+        forecastViewModel.data.observe(viewLifecycleOwner) { hourlyData ->
+            if (!hourlyData.isNullOrEmpty()) {
+                // Submit list cleanly without calling notifyDataSetChanged
+                hourlyAdapter.submitList(hourlyData)
+
+                // Track sun cycle text configurations cleanly
+                binding.sunriseTv.text = forecastViewModel.suntime.value.toString()
+                showSunriseAttribution()
+            }
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        //Log.d(TAG, "onDestroyView spinner_location " + PointLocations.instance.position)
         _binding = null
     }
 
-    private fun observeViewModel() {
-        forecastViewModel.isLoading.observe(viewLifecycleOwner) { isFetching ->
-            // isFetching is the Boolean value from the ViewModel's LiveData
-            if (isFetching) {
-                // Show the progress bar and optionally hide other content
-                progress.visibility = View.VISIBLE
-                //forecastList.visibility = View.GONE
-            } else {
-                // Hide the progress bar and show the content
-                progress.visibility = View.GONE
-                //forecastList.visibility = View.VISIBLE
-            }
-        }
+    fun showSunriseAttribution() {
+        Snackbar.make(binding.root, "Powered by SunriseSunset.io", Snackbar.LENGTH_LONG).show()
     }
 
-    private fun onClickRefresh() {
-      forecastViewModel.getNwsHourlyForecast()
-
-    }
-
+    /* --- Clean, Isolated Adapter Using ViewBinding Inside the ViewHolder --- */
     class ForecastDiffCallback : DiffUtil.ItemCallback<ForecastHourlyData>() {
-        override fun areItemsTheSame(
-            oldItem: ForecastHourlyData,
-            newItem: ForecastHourlyData
-        ): Boolean {
-
-            return oldItem.number == newItem.number
-        }
-
-        override fun areContentsTheSame(
-            oldItem: ForecastHourlyData,
-            newItem: ForecastHourlyData
-        ): Boolean {
-            //Log.d(
-           //     "ForecastDiffCallback",
-            //    " areContentsTheSame " + oldItem.startTime + " " + newItem.startTime
-            //)
-            return oldItem.startTime == newItem.startTime
-                    && oldItem.endTime == newItem.endTime
-                    && oldItem.shortForecast == newItem.shortForecast
-                    && oldItem.temperature == newItem.temperature
-                    && oldItem.icon == newItem.icon
-        }
-
-        override fun getChangePayload(
-            oldItem: ForecastHourlyData,
-            newItem: ForecastHourlyData
-        ): Any? {
-            Log.d("Forecast Fragment DiffUtil getChangePayload", newItem.startTime)
-            return super.getChangePayload(oldItem, newItem)
-        }
+        override fun areItemsTheSame(oldItem: ForecastHourlyData, newItem: ForecastHourlyData) = oldItem.number == newItem.number
+        override fun areContentsTheSame(oldItem: ForecastHourlyData, newItem: ForecastHourlyData) = oldItem == newItem
     }
 
-    private inner class HourlyAdapter :
-        ListAdapter<ForecastHourlyData, HourlyViewHolder>(ForecastDiffCallback()) {
+    private inner class HourlyAdapter : ListAdapter<ForecastHourlyData, HourlyViewHolder>(ForecastDiffCallback()) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyViewHolder {
-            //Log.d("HomeFragment", "HourlyAdapter onCreateViewHolder")
-            val layoutInflater = LayoutInflater.from(parent.context)
-            val view = layoutInflater.inflate(R.layout.item_weather_hourly, parent, false)
-            return HourlyViewHolder(view)
+            val binding = ItemWeatherHourlyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return HourlyViewHolder(binding)
         }
 
         override fun onBindViewHolder(holder: HourlyViewHolder, position: Int) {
-            //Log.d("HomeFragment", "HourlyAdapter onBindViewHolder")
-
             val listData = currentList[position]
-            //2022-09-15T17:00:00-04:00  Example of time date from JSON
-            val dayHour: String = try {
-                //Get day of week, take the first three letters, add a space
-                OffsetDateTime.parse(listData.startTime).dayOfWeek.toString().take(3).plus(" ")
-                    //Get offset time to correct UTC to local
-                    .plus(
-                        OffsetDateTime.parse(listData.startTime)
-                            //Format time to show hour and am/pm
-                            .format(DateTimeFormatter.ofPattern("  ha")).toString()
-                    )
+            val context = holder.itemView.context
 
+            val dayHour = try {
+                val parsedTime = OffsetDateTime.parse(listData.startTime)
+                "${parsedTime.dayOfWeek.toString().take(3)}   ${parsedTime.format(DateTimeFormatter.ofPattern("ha"))}"
             } catch (e: Exception) {
-                Log.d(TAG, "onBindViewHolder " + e.toString())
-                e.toString()
+                "N/A"
             }
-            val temp = listData.temperature.toString().plus(" ")
-            val humidity = listData.relativeHumidity.plus("%")
-            holder.textView_windSpeed.text = listData.windSpeed
-            //holder.textView_temperature.text = listData.temperature.toString().plus("F").plus(" / ").plus(listData.relativeHumidity.toString().plus("%"))
-            holder.textView_temperature.text = temp.plus("/").plus(humidity)
-            holder.textView_windDirection.text = listData.windDirection
-            holder.textView_startTime.text = dayHour
-            holder.textView_shortForecast.text = listData.shortForecast.plus(" " +listData.probabilityOfPrecipitation.toString().plus("%"))
-            //holder.textView_detailForecast.text = listData.detailedForecast
-            val imageName = checkForComma(listData.icon)
-            Log.d(TAG, "startTime " + listData.startTime)
-            val context = holder.itemView.context // Use the context from the ViewHolder's root view
-            holder.imageViewIcon.setImageDrawable(getDrawableByName(imageName, context))
-            //Log.d(TAG, "onBindViewHolder detail" + listData.detailedForecast)
 
+            holder.binding.apply {
+                textViewTemperature.text = "${listData.temperature} / ${listData.relativeHumidity}%"
+                textViewWindSpeed.text = listData.windSpeed
+                textViewWindDirection.text = listData.windDirection
+                textViewStartTime.text = dayHour
+                textViewShortForecast.text = "${listData.shortForecast} ${listData.probabilityOfPrecipitation}%"
+
+                val cleanImageName = checkForComma(listData.icon)
+                imageViewIcon.setImageDrawable(getDrawableByName(cleanImageName, context))
+            }
         }
 
-        //
-        fun getDrawableByName(name: String, context: Context): Drawable? {
-
-            Log.d(TAG, "getDrawableByName " + name)
+        private fun getDrawableByName(name: String, context: Context): Drawable? {
             val cleanName = name.replace('-', '_')
-            Log.d(TAG, "context.packageName " + context.packageName )
-            var drawableResource =
-                context.resources.getIdentifier(cleanName, "drawable", context.packageName)
-            /*
-            If an icon is not found or is mispelled, add generic icon "ic_missing"
-             */
-            if (drawableResource == 0) {
-                Log.d(TAG, "drawableResource ic_missing " + name)
-                //throw RuntimeException("Can't find drawable with name: $name")
-                drawableResource =
-                    context.resources.getIdentifier("ic_missing", "drawable", context.packageName)
-                /* Icons and descrition can be found here.
-                Check for spelling.  Descriptions found here https://w1.weather.gov/xml/current_obs/weather.php
-                 */
-            }
-            //return ContextCompat.getDrawable(activity!!, drawableResource)
-            return AppCompatResources.getDrawable( context, drawableResource)
+            var resId = context.resources.getIdentifier(cleanName, "drawable", context.packageName)
+            if (resId == 0) resId = context.resources.getIdentifier("ic_missing", "drawable", context.packageName)
+            return AppCompatResources.getDrawable(context, resId)
         }
 
-        fun checkForComma(icon: String): String {
-            //a typical link to an icon is like this
-            //https://api.weather.gov/icons/land/day/rain_showers?size=small
-            //Sometimes like this, to show a 30% chance
-            //https://api.weather.gov/icons/land/day/rain_showers,30?size=small
-            //The ForecastViewModel class has trimmed away all but the icon name "rain_showers"
-            //Icon names are the same as drawable names
-            //But, the ",30" is not part of the name
-            //Maybe I'll add functionality to add "30%" over the drawable
-            //Log.d(TAG, "Enhanced " + checkForEnhanced(icon))
-            var name = icon
-            var percentage = "0"
-            if (name.contains(",")) {
-                name = icon.substringBefore(",")
-                // this is the percentage chance, but NOT part of the drawable name
-                percentage = icon.substringAfter(",")
-            }
-            val cleanName = name.replace('-', '_')
-            Log.d(TAG, "Normal " + name)
-
-            return cleanName
-        }
-
-        fun checkForEnhanced(icon: String): String {
-            //a typical link to an icon is like this
-            //https://api.weather.gov/icons/land/day/rain_showers?size=small
-            //Sometimes like this, to show a 30% chance
-            //https://api.weather.gov/icons/land/day/rain_showers,30?size=small
-            //The ForecastViewModel class has trimmed away all but the icon name "rain_showers"
-            //Icon names are the same as drawable names
-            //But, the ",30" is not part of the name
-            //Maybe I'll add functionality to add "30%" over the drawable
-            Log.d(TAG, "Enhanced icon " + icon)
-            var enhancedame = icon
-            var percentage = "0"
-            if (enhancedame.contains(",")) {
-                enhancedame = icon.substringBefore(",")
-                Log.d(TAG, "Enhanced name " + enhancedame)
-                // this is the percentage chance, but NOT part of the drawable name
-                percentage = icon.substringAfter(",")
-                Log.d(TAG, "Enhanced perc " + percentage)
-                if (percentage != "0"){
-                    enhancedame = enhancedame.plus(percentage)
-                }
-            }
-
-            return enhancedame
-        }
-
-
-    }
-
-    /**
-     * Basic [RecyclerView.ViewHolder] for our gallery.
-     */
-    class HourlyViewHolder(view: View) :
-        RecyclerView.ViewHolder(view) {
-
-        //val rootView = view
-        val textView_startTime: TextView = view.findViewById(R.id.textView_startTime)
-        val textView_temperature: TextView = view.findViewById(R.id.textView_temperature)
-        val textView_windSpeed: TextView = view.findViewById(R.id.textView_windSpeed)
-        val textView_windDirection: TextView = view.findViewById(R.id.textView_windDirection)
-        val textView_shortForecast: TextView = view.findViewById(R.id.textView_shortForecast)
-        val imageViewIcon: ImageView = view.findViewById(R.id.imageViewIcon)
-        //val textView_detailForecast: TextView = view.findViewById(R.id.textView_detailForecast)
-    }
-
-    fun showSunriseAttribution() {
-        val snackbar = activity?.let {
-            Snackbar
-                .make(it.findViewById(android.R.id.content), "Powered by SunriseSunset.io", Snackbar.LENGTH_LONG)
-        }
-        if (snackbar != null) {
-            snackbar.show()
+        private fun checkForComma(icon: String): String {
+            val name = if (icon.contains(",")) icon.substringBefore(",") else icon
+            return name.replace('-', '_')
         }
     }
 
+    class HourlyViewHolder(val binding: ItemWeatherHourlyBinding) : RecyclerView.ViewHolder(binding.root)
 }

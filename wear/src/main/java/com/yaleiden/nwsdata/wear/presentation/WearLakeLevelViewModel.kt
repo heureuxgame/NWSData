@@ -14,6 +14,10 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
+//import com.yaleiden.nwsdata.wear.BuildConfig
+//import com.yaleiden.nwsdata.BuildConfig
+//import com.yaleiden.nwsdata.wear.BuildConfig as WearBuildConfig
+
 // 1. Updated Success state to carry both the site name and the current level
 sealed class WearUiState {
     object Loading : WearUiState()
@@ -29,6 +33,10 @@ class WearLakeLevelViewModel : ViewModel() {
     private val TAG = "WearLakeViewModel"
     private val latestJsonUrl = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/latest-continuous/items?monitoring_location_id=USGS-02193900&parameter_code=00062&f=json"
 
+    // 1️⃣ Pull the API Key safely from the shared BuildConfig
+    //private val apiKey = BuildConfig.WEATHER_API_KEY
+    // Use the explicit alias to bypass Android Studio's import confusion
+    //private val apiKey = WearBuildConfig.WEATHER_API_KEY
     private val _uiState = MutableStateFlow<WearUiState>(WearUiState.Loading)
     val uiState: StateFlow<WearUiState> = _uiState
 
@@ -55,6 +63,12 @@ class WearLakeLevelViewModel : ViewModel() {
     }
 
     private fun downloadAndParseLatestJson(urlString: String): ParsedLakeData {
+        // 2️⃣ Combine the target endpoint with your query parameter seamlessly
+        //val completeUrlString = "$urlString&api_key=$apiKey"
+        //Log.d(TAG, "Target WearOS JSON Request: $completeUrlString")
+
+        // 3️⃣ Open the connection using the complete authenticated string
+        //val url = URL(completeUrlString)
         val url = URL(urlString)
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"

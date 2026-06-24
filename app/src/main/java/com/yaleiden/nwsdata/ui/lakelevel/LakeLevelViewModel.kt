@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yaleiden.nwsdata.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -16,6 +17,9 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 data class WaterRecord(val date: String, val value: String)
 
@@ -42,17 +46,42 @@ class LakeLevelViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
 
-    fun fetchLakeData(historicalXmlUrl: String, latestJsonUrl: String) {
+    // API Keys and Target Base URLs stay contained in the logic layer
+    private val apiKey = BuildConfig.WEATHER_API_KEY
+    private val BASE_XML_URL = "https://waterservices.usgs.gov/nwis/dv/?site=02193900&format=waterml,1.1&ParameterCd=00062&"
+    private val LATEST_JSON_URL = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/latest-continuous/items?monitoring_location_id=USGS-02193900&parameter_code=00062&f=json"
+
+    /**
+     * Compute required dates internally within the data layout layer
+     */
+    private fun generateHistoricalUrl(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        val calendar = Calendar.getInstance()
+        val todayStr = dateFormat.format(calendar.time)
+
+        calendar.add(Calendar.DAY_OF_YEAR, -7)
+        val sevenDaysAgoStr = dateFormat.format(calendar.time)
+
+        return "${BASE_XML_URL}startDT=${sevenDaysAgoStr}&endDT=${todayStr}"
+    }
+
+    /**
+     * Public command execution trigger invoked cleanly by UI components
+     */
+    fun refreshLakeMetrics() {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = ""
             try {
-                // Fetch historical XML and latest JSON data concurrently in background IO threads
+                val historicalXmlUrl = generateHistoricalUrl()
+                Log.d(TAG, "Target XML API Request: $historicalXmlUrl")
+
+                // Concurrently pull data in IO threads
                 val historicalResult = withContext(Dispatchers.IO) {
                     downloadAndParseXml(historicalXmlUrl)
                 }
                 val latestValueResult = withContext(Dispatchers.IO) {
-                    downloadAndParseLatestJson(latestJsonUrl)
+                    downloadAndParseLatestJson(LATEST_JSON_URL)
                 }
 
                 _uiState.value = historicalResult
@@ -76,7 +105,6 @@ class LakeLevelViewModel : ViewModel() {
         if (connection.responseCode != HttpURLConnection.HTTP_OK) {
             throw Exception("Historical API returned HTTP ${connection.responseCode}")
         }
-
         return connection.inputStream.use { stream -> parseXml(stream) }
     }
 
@@ -132,7 +160,14 @@ class LakeLevelViewModel : ViewModel() {
     }
 
     private fun downloadAndParseLatestJson(urlString: String): String {
-        val url = URL(urlString)
+        // Optional placeholder: Append your apiKey query parameter or headers here safely if needed!
+
+        // 1. Combine the base URL with your apiKey property securely
+        val completeUrlString = "$urlString&api_key=$apiKey"
+        //val url = URL(urlString)
+        // 2. Use the new complete URL string to open the connection
+        val url = URL(completeUrlString)
+
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
         connection.connectTimeout = 10000
@@ -150,7 +185,6 @@ class LakeLevelViewModel : ViewModel() {
         }
         reader.close()
 
-        // Dig into GeoJSON path: features[0] -> properties -> value
         val jsonObject = JSONObject(responseBuilder.toString())
         val featuresArray = jsonObject.getJSONArray("features")
         if (featuresArray.length() > 0) {

@@ -23,7 +23,7 @@ gradle-app.setting
 /.idea/libraries/
 
 # Proguard configuration files
-proguard-rules.pro
+#proguard-rules.pro
 
 
 local.properties

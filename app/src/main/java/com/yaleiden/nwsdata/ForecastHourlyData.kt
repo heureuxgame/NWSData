@@ -1,55 +1,25 @@
 package com.yaleiden.nwsdata
 
-import android.util.Log
-import androidx.recyclerview.widget.DiffUtil
-import java.util.logging.Logger
-
-class ForecastHourlyData {
-private val TAG = "ForecastHourlyData"
-
-    var number: Int = 0 //": 1, Time Period number
-
-    var name:String = "null" //": "This Afternoon",
-
-    var startTime:String = "null"//": "",
-
-    var endTime:String = "null"//": "2022-09-15T18:00:00-04:00",
-
-    var isDaytime:Boolean = true//": true,
-
-    var temperature:Int = 111//": 79,
-
-    var temperatureUnit:String = "null"//": "F",
-
-    var temperatureTrend:String = "null"//": null,
-
-    var windSpeed:String = "null"//": "9 mph",
-
-    var windDirection:String = "null"//": "N",
-
-    var icon:String = "null"//": "https://api.weather.gov/icons/land/day/sct?size=medium",
-
-    var shortForecast:String = "null"//": "Mostly Sunny",
-
-    //var detailedForecast:String = "null"//":
-
-    var probabilityOfPrecipitation:Int = 100
-    /*
-    "probabilityOfPrecipitation": {
-        "unitCode": "wmoUnit:percent",
-        "value": 40
-    }
-     */
-    var relativeHumidity:String = "null"
-    /*
-    "relativeHumidity": {
-        "unitCode": "wmoUnit:percent",
-        "value": 64
-    }
-    */
-    var dewpoint:String = "null"
-    /*
-    "dewpoint":{"unitCode":"wmoUnit:degC","value":0}
-*/
-
-}
+/**
+ * Clean data class representation for an hourly weather forecast period.
+ * * Using the 'data' keyword automatically generates structural [equals],
+ * [hashCode], and [toString] methods based on these fields, instantly
+ * fixing the ListAdapter DiffUtil warnings.
+ */
+data class ForecastHourlyData(
+    var number: Int = 0,
+    var name: String = "null",
+    var startTime: String = "null",
+    var endTime: String = "null",
+    var isDaytime: Boolean = true,
+    var temperature: Int = 111,
+    var temperatureUnit: String = "null",
+    var temperatureTrend: String = "null",
+    var windSpeed: String = "null",
+    var windDirection: String = "null",
+    var icon: String = "null",
+    var shortForecast: String = "null",
+    var probabilityOfPrecipitation: Int = 100,
+    var relativeHumidity: String = "null",
+    var dewpoint: String = "null"
+)
